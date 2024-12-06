@@ -1,16 +1,16 @@
 # Core Libraries
-numpy==1.24.0         # For numerical computations
-pandas==1.5.3         # For data manipulation and analysis
-scikit-learn==0.24.2  # For machine learning tasks
+numpy         # For numerical computations
+pandas        # For data manipulation and analysis
+scikit-learn  # For machine learning tasks
 
 # Visualization Libraries
-matplotlib==3.7.2     # For basic plotting
-seaborn==0.12.2       # For enhanced statistical visualizations
-plotly==5.15.0        # For interactive visualizations
+matplotlib     # For basic plotting
+seaborn       # For enhanced statistical visualizations
+# plotly==5.15.0        # For interactive visualizations
 
 # Jupyter Notebook
-notebook==7.0.3       # To run the .ipynb file
+notebook       # To run the .ipynb file
 
 # Optional Libraries
-scipy==1.11.3         # For advanced statistical analysis
-statsmodels==0.14.0   # For statistical modeling and diagnostics
+scipy         # For advanced statistical analysis
+# statsmodels==0.14.0   # For statistical modeling and diagnostics
