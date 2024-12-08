@@ -4,13 +4,17 @@ pandas        # For data manipulation and analysis
 scikit-learn  # For machine learning tasks
 
 # Visualization Libraries
-matplotlib     # For basic plotting
+matplotlib    # For basic plotting
 seaborn       # For enhanced statistical visualizations
-# plotly==5.15.0        # For interactive visualizations
+# plotly      # For interactive visualizations
 
 # Jupyter Notebook
-notebook       # To run the .ipynb file
+notebook      # To run the .ipynb file
+
+# Machine Learning Pipeline
+sqlite3
+joblib
 
 # Optional Libraries
 scipy         # For advanced statistical analysis
-# statsmodels==0.14.0   # For statistical modeling and diagnostics
+# statsmodels # For statistical modeling and diagnostics
