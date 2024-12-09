@@ -222,34 +222,30 @@ Any metrics used in the evaluation should also be explained.
 ### Task: Temperature Prediction
 
 #### Model: Random Forest Regressor and Gradient Boosting Regressor
-Random Forest Temperature Prediction MAE (Train): 2.426203792777704e-05
-Random Forest Temperature Prediction MAE (Test): 6.171798399206995e-05
 
-Gradient Boosting Temperature Prediction MAE (Train): 0.00890701037514177
-Gradient Boosting Temperature Prediction MAE (Test): 0.009150800025774671
 
-The results indicate the performance of the models on both the training and test datasets. Let's break it down:
+**Random Forest Results:**
+**Training MAE: 2.43e-05**
 
-Random Forest Results:
-Training MAE: 2.43e-05
-Test MAE: 6.17e-05
+**Test MAE: 6.17e-05**
 
-Gradient Boosting Results:
-Training MAE: 0.00891
-Test MAE: 0.00915
+**Gradient Boosting Results:**
+**Training MAE: 0.00891**
+
+**Test MAE: 0.00915**
 
 **Analysis:**
 
 **Random Forest Model:**
 
-Low Training MAE (2.43e-05): This value is extremely low, suggesting that the model is fitting the training data very well, with very small errors.
-Higher Test MAE (6.17e-05): While still small, the test MAE is slightly higher than the training MAE, indicating that the model might not generalize perfectly to unseen data. However, this is not a major concern because the test MAE is still very small, suggesting that the Random Forest model is still making accurate predictions on the test set.
+**Low Training MAE (2.43e-05)**: This value is extremely low, suggesting that the model is fitting the training data very well, with very small errors.
+**Higher Test MAE (6.17e-05)**: While still small, the test MAE is slightly higher than the training MAE, indicating that the model might not generalize perfectly to unseen data. However, this is not a major concern because the test MAE is still very small, suggesting that the Random Forest model is still making accurate predictions on the test set.
 Interpretation: The Random Forest model is performing well, but there might be a slight overfitting to the training data. Overfitting is common when the model learns very specific patterns in the training data that do not generalize perfectly. However, the error is still very small and acceptable.
 
 **Gradient Boosting Model:**
 
-Training MAE (0.00891): This is slightly higher than the Random Forest model's training MAE, indicating that the Gradient Boosting model isn't fitting the training data as perfectly.
-Test MAE (0.00915): The difference between training and test MAE is very small, suggesting that Gradient Boosting is generalizing better than Random Forest. It is likely avoiding overfitting, as the error on both the training and test sets is very similar.
+**Training MAE (0.00891)**: This is slightly higher than the Random Forest model's training MAE, indicating that the Gradient Boosting model isn't fitting the training data as perfectly.
+**Test MAE (0.00915)**: The difference between training and test MAE is very small, suggesting that Gradient Boosting is generalizing better than Random Forest. It is likely avoiding overfitting, as the error on both the training and test sets is very similar.
 Interpretation: The Gradient Boosting model has a slightly higher error on the training set, but its test error is almost the same, showing that it might be more stable and better at generalizing to new data. This is a positive sign of robustness and the model's ability to handle unseen data.
 
 **Conclusion/ Pipeline Choice:**
@@ -262,11 +258,12 @@ Since we are aiming for a balance between accuracy and generalization to predict
 #### Model: Random Forest Classifier and Logistic Regression
 
 **Random Forest Classifier**
-Random Forest Categorization Accuracy: 1.0
-Random Forest Precision: 1.0
-Random Forest Recall: 1.0
-Random Forest F1 Score: 1.0
-Random Forest Confusion Matrix:
+**Random Forest Categorization Accuracy: 1.0**
+**Random Forest Precision: 1.0**
+**Random Forest Recall: 1.0**
+**Random Forest F1 Score: 1.0**
+**Random Forest Confusion Matrix:**
+```
 [[1632    0    0    0    0    0    0    0    0    0    0    0]
  [   0 1744    0    0    0    0    0    0    0    0    0    0]
  [   0    0 1722    0    0    0    0    0    0    0    0    0]
@@ -279,14 +276,16 @@ Random Forest Confusion Matrix:
  [   0    0    0    0    0    0    0    0    0 1669    0    0]
  [   0    0    0    0    0    0    0    0    0    0 1697    0]
  [   0    0    0    0    0    0    0    0    0    0    0 1691]]
-Random Forest Train Accuracy: 1.0
+ ```
+**Random Forest Train Accuracy: 1.0**
 
 **Logistic Regression**
-Logistic Regression Categorization Accuracy: 1.0
-Logistic Regression Precision: 1.0
-Logistic Regression Recall: 1.0
-Logistic Regression F1 Score: 1.0
-Logistic Regression Confusion Matrix:
+**Logistic Regression Categorization Accuracy: 1.0**
+**Logistic Regression Precision: 1.0**
+**Logistic Regression Recall: 1.0**
+**Logistic Regression F1 Score: 1.0**
+**Logistic Regression Confusion Matrix:**
+```
 [[1632    0    0    0    0    0    0    0    0    0    0    0]
  [   0 1744    0    0    0    0    0    0    0    0    0    0]
  [   0    0 1722    0    0    0    0    0    0    0    0    0]
@@ -299,7 +298,8 @@ Logistic Regression Confusion Matrix:
  [   0    0    0    0    0    0    0    0    0 1669    0    0]
  [   0    0    0    0    0    0    0    0    0    0 1697    0]
  [   0    0    0    0    0    0    0    0    0    0    0 1691]]
-Logistic Regression Train Accuracy: 1.0
+ ```
+**Logistic Regression Train Accuracy: 1.0**
 
 There seems to be something wrong with the model as there is 100% accuracy. I will have to figure this out.
 
