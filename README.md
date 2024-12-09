@@ -236,13 +236,13 @@ Any metrics used in the evaluation should also be explained.
 
 **Analysis:**
 
-##### **Random Forest Model:**
+#### **Random Forest Model:**
 
 **Low Training MAE (2.43e-05)**: This value is extremely low, suggesting that the model is fitting the training data very well, with very small errors.
 **Higher Test MAE (6.17e-05)**: While still small, the test MAE is slightly higher than the training MAE, indicating that the model might not generalize perfectly to unseen data. However, this is not a major concern because the test MAE is still very small, suggesting that the Random Forest model is still making accurate predictions on the test set.
 Interpretation: The Random Forest model is performing well, but there might be a slight overfitting to the training data. Overfitting is common when the model learns very specific patterns in the training data that do not generalize perfectly. However, the error is still very small and acceptable.
 
-##### **Gradient Boosting Model:**
+#### **Gradient Boosting Model:**
 
 **Training MAE (0.00891)**: This is slightly higher than the Random Forest model's training MAE, indicating that the Gradient Boosting model isn't fitting the training data as perfectly.
 **Test MAE (0.00915)**: The difference between training and test MAE is very small, suggesting that Gradient Boosting is generalizing better than Random Forest. It is likely avoiding overfitting, as the error on both the training and test sets is very similar.
@@ -257,17 +257,17 @@ Since we are aiming for a balance between accuracy and generalization to predict
 
 #### Model: Random Forest Classifier and Logistic Regression
 
-##### **Random Forest Classifier**
+#### **Random Forest Classifier**
 
-**Random Forest Categorization Accuracy: 1.0**
+Random Forest Categorization Accuracy: 1.0
 
-**Random Forest Precision: 1.0**
+Random Forest Precision: 1.0
 
-**Random Forest Recall: 1.0**
+Random Forest Recall: 1.0
 
-**Random Forest F1 Score: 1.0**
+Random Forest F1 Score: 1.0
 
-**Random Forest Confusion Matrix:**
+Random Forest Confusion Matrix:
 
 ```
 [[1632    0    0    0    0    0    0    0    0    0    0    0]
@@ -283,20 +283,20 @@ Since we are aiming for a balance between accuracy and generalization to predict
  [   0    0    0    0    0    0    0    0    0    0 1697    0]
  [   0    0    0    0    0    0    0    0    0    0    0 1691]]
  ```
-**Random Forest Train Accuracy: 1.0**
+Random Forest Train Accuracy: 1.0
 
 
-##### **Logistic Regression**
+#### **Logistic Regression**
 
-**Logistic Regression Categorization Accuracy: 1.0**
+Logistic Regression Categorization Accuracy: 1.0
 
-**Logistic Regression Precision: 1.0**
+Logistic Regression Precision: 1.0
 
-**Logistic Regression Recall: 1.0**
+Logistic Regression Recall: 1.0
 
-**Logistic Regression F1 Score: 1.0**
+Logistic Regression F1 Score: 1.0
 
-**Logistic Regression Confusion Matrix:**
+Logistic Regression Confusion Matrix:
 ```
 [[1632    0    0    0    0    0    0    0    0    0    0    0]
  [   0 1744    0    0    0    0    0    0    0    0    0    0]
@@ -311,7 +311,7 @@ Since we are aiming for a balance between accuracy and generalization to predict
  [   0    0    0    0    0    0    0    0    0    0 1697    0]
  [   0    0    0    0    0    0    0    0    0    0    0 1691]]
  ```
-**Logistic Regression Train Accuracy: 1.0**
+Logistic Regression Train Accuracy: 1.0
 
 There seems to be something wrong with the model as there is 100% accuracy. I will have to figure this out.
 
