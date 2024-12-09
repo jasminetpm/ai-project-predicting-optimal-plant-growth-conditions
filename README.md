@@ -19,7 +19,6 @@ Email Address: jasmine.tpm@gmail.com
 
 ## Installation
 
-
 ### Prerequisites
 All software, packages, and dependencies that need to be installed beforehand are listed in requirements.txt
 
@@ -39,7 +38,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 3. Execute the ML Pipeline
-Run in Console:
+To execute the bash script, run in Console:
 
 bash run.sh
 
