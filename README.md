@@ -11,6 +11,10 @@ These efforts will not only enhance current operations but also provide valuable
 - [Overview](#overview)
 - [Installation](#installation)
 - [Description of Pipeline](#description)
+- [Overview of Key Findings from EDA](#keyfindings)
+- [Describe How Features In the Dataset Are Processed](#featuresprocessing)
+- [Explanation of Choice of Models] (#modelexplanation)
+- [Other Considerations] (#otherconsiderations)
 
 
 ## Full Name
@@ -22,6 +26,7 @@ Email Address: jasmine.tpm@gmail.com
 ## Overview
 Overview of the submitted folder and the folder structure.
 
+```
 project-folder/
 ├── data/                     # Directory for storing datasets (e.g., raw and processed data).
 ├── src/                      # Directory containing core Python scripts (4 files).
@@ -34,7 +39,7 @@ project-folder/
 ├── README.md                 # Documentation providing an overview and instructions for the project.
 ├── requirements.txt          # List of required Python packages for the project.
 ├── run.sh                    # Bash script to execute the pipeline and orchestrate tasks.
-
+```
 
 ## Installation
 Instructions for executing the pipeline and modifying any parameters.
@@ -147,7 +152,7 @@ Ensures the pipeline runs smoothly from data ingestion to model training with a 
 2. Model Training:
 - I should have used correlation insights to prioritize important features (eg Light Intensity and CO2 Levels to predict Plant Type and Stage).
 
-## Describe how the features in the dataset are processed (summarised in a table)
+## Describe How Features In the Dataset Are Processed (summarised in a table)
 
 | **Feature**                     | **Type**         | **Issues Identified**                | **Processing Steps**                                                                                                                                 |
 |----------------------------------|------------------|--------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -170,7 +175,7 @@ Ensures the pipeline runs smoothly from data ingestion to model training with a 
 | **Water Level Sensor (mm)**      | Numerical        | Missing Values,              | - Impute missing values with mean. |
 
 
-## Explanation of your choice of models for each machine learning task.
+## Explanation of Choice of Models for Each Machine Learning Task
 
 ### Task: Temperature Prediction
 
@@ -196,8 +201,11 @@ Gradient Boosting sequentially reduces bias and achieves better performance on d
 #### Model: Random Forest Classifier
 Reasons:
 - Effective for multi-class classification tasks.
-- Handles high-dimensional and categorical features well.
+- Handles high-dimensional and categorical features well/ Handles non-linear relationships well.
 - Offers feature importance insights.
+- Robust against overfitting due to ensemble averaging.
+- Works well with high-dimensional data and categorical variables.
+
 
 #### Model: Logistic Regression
 Reasons:
@@ -246,7 +254,7 @@ Training MAE (0.00891): This is slightly higher than the Random Forest model's t
 Test MAE (0.00915): The difference between training and test MAE is very small, suggesting that Gradient Boosting is generalizing better than Random Forest. It is likely avoiding overfitting, as the error on both the training and test sets is very similar.
 Interpretation: The Gradient Boosting model has a slightly higher error on the training set, but its test error is almost the same, showing that it might be more stable and better at generalizing to new data. This is a positive sign of robustness and the model's ability to handle unseen data.
 
-Conclusion:
+**Conclusion/ Pipeline Choice:**
 Both models are performing well in terms of temperature prediction, with Random Forest being more accurate on the training set but showing a slight increase in test error. This could indicate some level of overfitting.
 Gradient Boosting, while slightly less accurate on the training set, has similar performance on both training and test sets, indicating better generalization.
 Since we are aiming for a balance between accuracy and generalization to predict the temperature conditions within the farm's closed environment, ensuring optimal plant growth, Gradient Boosting might be the better choice. However, if minimizing the training error is critical, then Random Forest might be preferred, as long as we can manage the slight overfitting.
@@ -255,6 +263,7 @@ Since we are aiming for a balance between accuracy and generalization to predict
 
 #### Model: Random Forest Classifier and Logistic Regression
 
+**Random Forest Classifier**
 Random Forest Categorization Accuracy: 1.0
 Random Forest Precision: 1.0
 Random Forest Recall: 1.0
@@ -274,6 +283,7 @@ Random Forest Confusion Matrix:
  [   0    0    0    0    0    0    0    0    0    0    0 1691]]
 Random Forest Train Accuracy: 1.0
 
+**Logistic Regression**
 Logistic Regression Categorization Accuracy: 1.0
 Logistic Regression Precision: 1.0
 Logistic Regression Recall: 1.0
@@ -293,4 +303,31 @@ Logistic Regression Confusion Matrix:
  [   0    0    0    0    0    0    0    0    0    0    0 1691]]
 Logistic Regression Train Accuracy: 1.0
 
-There seems to be soemthing wrong with the model as there is 100% accuracy. I will have to figure this out.
+There seems to be something wrong with the model as there is 100% accuracy. I will have to figure this out.
+
+I will still explain the metrics used to evaluate the model:
+
+- Accuracy: Proportion of correctly predicted instances out of the total predictions.
+A value of 1.0 indicates the model predicted all instances correctly.
+
+- Precision: Proportion of true positives (correctly classified instances) out of all predicted positives for each class.
+
+- Weighted average is used due to multiple classes.
+A value of 1.0 signifies no false positives.
+
+- Recall (Sensitivity): Proportion of true positives out of all actual positives for each class.
+A value of 1.0 indicates no false negatives.
+
+- F1 Score: Harmonic mean of precision and recall, balancing the two metrics.
+A value of 1.0 indicates perfect precision and recall.
+
+- Confusion Matrix: Summarizes the performance by showing true positives, false positives, and false negatives for each class.
+A diagonal matrix (non-zero entries only on the diagonal) signifies perfect classification.
+
+**Conclusion/ Pipeline Choice:**
+I would prefer Random Forest for its robustness and non-linear feature handling. It would likely generalize better on unseen data in slightly noisier scenarios.
+
+
+## Other Considerations
+- In the future, I would probably remove more features from the dataset that are lowly-correlated to the target feature *Plant Type-Stage* to prevent overfitting and increase predictive performance.
+- I will also apply different encoding strategies for Plant Type and Plant Stage to better capture their unique characteristics. Since Plant Type represents distinct, unrelated categories, a one-hot encoding approach is appropriate to treat each type independently without implying any ordinal relationship. On the other hand, Plant Stage follows a sequential progression (e.g. Seedling progresses to Vegetative progresses to Maturity), making ordinal encoding or a similar method more suitable to preserve the inherent order and capture meaningful stage transitions.
