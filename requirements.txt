@@ -13,7 +13,6 @@ seaborn       # For enhanced statistical visualizations
 notebook      # To run the .ipynb file
 
 # Machine Learning Pipeline
-sqlite3
 joblib
 
 # Optional Libraries
