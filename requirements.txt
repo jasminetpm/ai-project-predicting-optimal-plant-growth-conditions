@@ -1,6 +1,7 @@
 # Core Libraries
 numpy         # For numerical computations
 pandas        # For data manipulation and analysis
+scipy         # For machine learning pipeline
 scikit-learn  # For machine learning tasks
 
 # Visualization Libraries

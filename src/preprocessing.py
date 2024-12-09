@@ -1,3 +1,4 @@
+import sqlite3
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
@@ -5,7 +6,6 @@ from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 import joblib
-import sys
 import json
 
 # Function to standardize the format of categories to Title Case
@@ -96,19 +96,19 @@ def handle_outliers(data):
     return data
 
 # Main Preprocessing Function
-def preprocess_data(df, target_type, config):
+def preprocess_data(df, config):
     """
     Preprocess the data by handling outliers, imputing missing values, scaling numeric features,
-    and encoding categorical features for either temperature or plant_stage prediction.
+    and encoding categorical features for both temperature and plant_stage prediction.
 
     Parameters:
         df (pd.DataFrame): The input DataFrame.
-        target_type (str): The target type to process ('temperature' or 'plant_stage').
-        config (dict): Configuration dictionary containing feature columns and target variable.
+        config (dict): Configuration dictionary containing feature columns and target variables.
 
     Returns:
         np.ndarray: Preprocessed feature matrix.
-        pd.Series: Target variable.
+        pd.Series: Target variable for temperature prediction.
+        pd.Series: Target variable for plant_stage categorization.
     """
     # Standardize categories
     df = standardize_format(df)
@@ -119,13 +119,14 @@ def preprocess_data(df, target_type, config):
     # Handle outliers
     df = handle_outliers(df)
 
-    # Select the correct target column based on target_type
-    if target_type == "temperature":
-        target_column = config["temperature_target_column"]
-    elif target_type == "plant_stage":
-        target_column = config["plant_stage_target_column"]
-    else:
-        raise ValueError("Invalid target_type. Must be 'temperature' or 'plant_stage'.")
+    # Extract the target columns based on config
+    y_temp = df[config["temperature_target_column"]]  # Target for temperature prediction
+    y_cat = df[config["plant_stage_target_column"]]   # Target for plant stage categorization
+
+    # Impute missing values in y_temp with the mean
+    y_temp_imputer = SimpleImputer(strategy='mean')
+    y_temp = pd.Series(y_temp_imputer.fit_transform(y_temp.values.reshape(-1, 1)).flatten(), index=y_temp.index)
+    print("Imputed missing values in y_temp with the mean.")
 
     # Extract numeric and categorical features
     numeric_features = config["numeric_features"]
@@ -150,30 +151,43 @@ def preprocess_data(df, target_type, config):
         ]
     )
     
-    # Separate features (X) and target variable (y)
+    # Separate features (X)
     X = df[numeric_features + categorical_features]
-    y = df[target_column]
 
     # Apply preprocessing pipeline
     X_processed = preprocessor.fit_transform(X)
 
-    # Save the preprocessor for future use
-    joblib.dump(preprocessor, f"preprocessor_{target_type}.pkl")
-    print(f"Preprocessing pipeline for {target_type} saved to preprocessor_{target_type}.pkl")
+    # Convert X_processed back to DataFrame for easier inspection
+    X_final = pd.DataFrame(X_processed)
 
-    return X_processed, y
+    # Optional: Add feature names back to the DataFrame (after OneHotEncoding)
+    feature_names = numeric_features + preprocessor.transformers_[1][1]['encoder'].get_feature_names_out(categorical_features).tolist()
+    X_final.columns = feature_names
+
+    # Save the preprocessor for future use
+    joblib.dump(preprocessor, "preprocessor.pkl")
+    print("Preprocessing pipeline saved to preprocessor.pkl")
+
+    return X_final, X_processed, y_temp, y_cat
 
 if __name__ == "__main__":
-    # Get target type from command-line argument
-    target_type = sys.argv[1]  # Expects 'temperature' or 'plant_stage'
-
-    # Load configuration and dataset
+    # Load configuration
     with open("config.json", "r") as f:
         config = json.load(f)
-    df = pd.read_csv("data.csv")
+    
+    # Load data
+    df = pd.read_csv("data.csv")  # Adjust this if you're loading from SQLite
 
-    # Preprocess the data based on the target type
-    X, y = preprocess_data(df, target_type, config)
+    # Preprocess the data
+    X_final, X, y_temp, y_cat = preprocess_data(df, config)
 
-    # Display success message
-    print(f"Data preprocessing complete for {target_type}. Preprocessed features and target variable are ready.")
+    # Save the preprocessed data
+    pd.DataFrame(X).to_pickle("X.pkl")  # Save feature matrix
+    y_temp.to_pickle("y_temp.pkl")  # Save target for temperature prediction
+    y_cat.to_pickle("y_cat.pkl")  # Save target for plant stage categorization
+
+    # Print the final DataFrame for inspection
+    # print("Final Preprocessed DataFrame:")
+    # print(X_final.head())  # Display the first few rows of the processed features DataFrame
+
+    print("Preprocessing complete. Files saved: X.pkl, y_temp.pkl, y_cat.pkl")
