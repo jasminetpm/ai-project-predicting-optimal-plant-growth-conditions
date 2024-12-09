@@ -153,39 +153,69 @@ Ensures the pipeline runs smoothly from data ingestion to model training with a 
 |----------------------------------|------------------|--------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **System Location Code**         | Categorical      | High Cardinality                     | - Encode using target encoding to reduce dimensionality.                                                                                             |
 | **Previous Cycle Plant Type**    | Categorical      | Missing Values                       | -  One-hot encoding for categorical representation.                                                        |
-| **Plant Type**                   | Categorical      | Missing Values                       | - - Encode using one-hot encoding                                 |
-| **Plant Stage**                  | Categorical      | Low Cardinality                      | - One-hot encode to create binary features for each category.                                                                                        |
+| **Plant Type**                   | Categorical      | Weird Formatting, Missing Values                       | - Standardized 'Plant Type' and 'Plant Stage' to Title Case. <br>
+-  Encode using one-hot encoding                                 |
+| **Plant Stage**                  | Categorical      | Weird Formatting, Low Cardinality                      | - Standardized 'Plant Type' and 'Plant Stage' to Title Case. <br>
+- One-hot encode to create binary features for each category.                                                                                        |
 | **Temperature Sensor (°C)**      | Numerical        | Missing Values, Outliers             | - Impute missing values with mean. <br> - Handle outliers using absolute. <br> - Scale using StandardScaler.         |
 | **Humidity Sensor (%)**          | Numerical        | Missing Values                       | - Impute missing values using mean. <br> - Scale for consistency with other numerical features.                                            |
 | **Light Intensity Sensor (lux)** | Numerical        | Outliers                             | - Handle outliers using clipping. Remove values less than zero. <br> - Scale for consistency.                                                                   |
-| **CO2 Sensor (ppm)**             | Numerical        | Outliers          | -  <br> - Scale using StandardScaler.            |
+| **CO2 Sensor (ppm)**             | Numerical        | Outliers          | - Scale using StandardScaler.            |
 | **EC Sensor (dS/m)**             | Numerical        | Negative Values     | - Remove negative values <br> - Use the Interquartile Range (IQR) method to identify and remove extreme outliers: Scale using StandardScaler.                        |
 | **O2 Sensor (ppm)**              | Numerical        | None                     | - Impute missing values using mean. <br> - Scale for consistency with other numerical features.                                                      |
-| **Nutrient N Sensor (ppm)**      | Numerical        | Missing Values, Outliers             | - Impute missing values with mean.                        |
-| **Nutrient P Sensor (ppm)**      | Numerical        | Missing Values, Outliers             | - Impute missing values using mean.                                        |
-| **Nutrient K Sensor (ppm)**      | Numerical        | Missing Values, Outliers             | - Impute missing values using mean.                                         |
+| **Nutrient N Sensor (ppm)**      | Numerical        | Missing Values, Outliers             | - Impute missing values with mean.  <br> -  Stripped ' ppm' and converted Nutrient N, P and K Sensor (ppm) to numeric.                    |
+| **Nutrient P Sensor (ppm)**      | Numerical        | Missing Values, Outliers             | - Impute missing values using mean.  <br> -  Stripped ' ppm' and converted Nutrient N, P and K Sensor (ppm) to numeric.                                  |
+| **Nutrient K Sensor (ppm)**      | Numerical        | Missing Values, Outliers             | - Impute missing values using mean.   <br> -  Stripped ' ppm' and converted Nutrient N, P and K Sensor (ppm) to numeric.                                      |
 | **pH Sensor**                    | Numerical        | None    | - Impute missing values using mean. <br> - Standardize values to a consistent scale (e.g., 0-14).                                                    |
 | **Water Level Sensor (mm)**      | Numerical        | Missing Values,              | - Impute missing values with mean. |
 
 
-## g. Explanation of your choice of models for each machine learning task.
-## h. Evaluation of the models developed. Any metrics used in the evaluation should also be
-explained.
-## i. Other considerations for deploying the models developed.
+## Explanation of your choice of models for each machine learning task.
+
+### Task: Temperature Prediction
+
+#### Model: Random Forest Regressor
+Reasons:
+- Handles non-linear relationships well.
+- Robust to outliers and noise in the data.
+- Automatically captures feature importance and interactions.
+
+#### Model: Gradient Boosting Regressor
+Reasons:
+- Performs well with moderately sized datasets and complex patterns.
+- Optimizes errors sequentially, reducing bias.
+- Highly flexible for fine-tuning.
+
+#### Key Considerations:
+Both models are ensemble methods capable of capturing complex patterns in the data.
+Random Forest focuses on reducing variance, making it suitable for datasets with potential overfitting issues.
+Gradient Boosting sequentially reduces bias and achieves better performance on datasets with subtle patterns.
+
+### Task: Plant Type-Stage Prediction
+
+#### Model: Random Forest Classifier
+Reasons:
+- Effective for multi-class classification tasks.
+- Handles high-dimensional and categorical features well.
+- Offers feature importance insights.
+
+#### Model: Logistic Regression
+Reasons:
+- Suitable baseline model for classification.
+- Interpretable coefficients to understand feature contributions.
+- Performs well on linearly separable data.
+
+#### Key Considerations:
+Random Forest is chosen for its robustness and ability to handle non-linear relationships in the data.
+Logistic Regression provides a simple, interpretable model and serves as a benchmark for performance comparison.
 
 
-## Overview of Key Findings from EDA 
-- Stripped ' ppm' and converted Nutrient N, P and K Sensor (ppm) to numeric.
-- Standardized 'Plant Type' and 'Plant Stage' to Title Case.
-- Flipped negative temperature values to positive.
-- Removed rows with negative Light Intensity values.
-- Removed rows with negative EC values.
-- Removed extreme EC outliers using the IQR method.
+## Evaluation of the Models Developed. 
+Any metrics used in the evaluation should also be explained.
 
-## g. Explanation of your choice of models for each machine learning task.
+### Task: Temperature Prediction
 
-## h. Evaluation of the models developed. Any metrics used in the evaluation should also be explained.
-
+#### Model: Random Forest Regressor and Gradient Boosting Regressor
 Random Forest Temperature Prediction MAE (Train): 2.426203792777704e-05
 Random Forest Temperature Prediction MAE (Test): 6.171798399206995e-05
 
@@ -202,15 +232,15 @@ Gradient Boosting Results:
 Training MAE: 0.00891
 Test MAE: 0.00915
 
-Analysis:
+**Analysis:**
 
-Random Forest Model:
+**Random Forest Model:**
 
 Low Training MAE (2.43e-05): This value is extremely low, suggesting that the model is fitting the training data very well, with very small errors.
 Higher Test MAE (6.17e-05): While still small, the test MAE is slightly higher than the training MAE, indicating that the model might not generalize perfectly to unseen data. However, this is not a major concern because the test MAE is still very small, suggesting that the Random Forest model is still making accurate predictions on the test set.
 Interpretation: The Random Forest model is performing well, but there might be a slight overfitting to the training data. Overfitting is common when the model learns very specific patterns in the training data that do not generalize perfectly. However, the error is still very small and acceptable.
 
-Gradient Boosting Model:
+**Gradient Boosting Model:**
 
 Training MAE (0.00891): This is slightly higher than the Random Forest model's training MAE, indicating that the Gradient Boosting model isn't fitting the training data as perfectly.
 Test MAE (0.00915): The difference between training and test MAE is very small, suggesting that Gradient Boosting is generalizing better than Random Forest. It is likely avoiding overfitting, as the error on both the training and test sets is very similar.
@@ -220,3 +250,47 @@ Conclusion:
 Both models are performing well in terms of temperature prediction, with Random Forest being more accurate on the training set but showing a slight increase in test error. This could indicate some level of overfitting.
 Gradient Boosting, while slightly less accurate on the training set, has similar performance on both training and test sets, indicating better generalization.
 Since we are aiming for a balance between accuracy and generalization to predict the temperature conditions within the farm's closed environment, ensuring optimal plant growth, Gradient Boosting might be the better choice. However, if minimizing the training error is critical, then Random Forest might be preferred, as long as we can manage the slight overfitting.
+
+### Task: Plant Type-Stage Prediction
+
+#### Model: Random Forest Classifier and Logistic Regression
+
+Random Forest Categorization Accuracy: 1.0
+Random Forest Precision: 1.0
+Random Forest Recall: 1.0
+Random Forest F1 Score: 1.0
+Random Forest Confusion Matrix:
+[[1632    0    0    0    0    0    0    0    0    0    0    0]
+ [   0 1744    0    0    0    0    0    0    0    0    0    0]
+ [   0    0 1722    0    0    0    0    0    0    0    0    0]
+ [   0    0    0 1792    0    0    0    0    0    0    0    0]
+ [   0    0    0    0 1640    0    0    0    0    0    0    0]
+ [   0    0    0    0    0 1636    0    0    0    0    0    0]
+ [   0    0    0    0    0    0 1723    0    0    0    0    0]
+ [   0    0    0    0    0    0    0 1781    0    0    0    0]
+ [   0    0    0    0    0    0    0    0 1668    0    0    0]
+ [   0    0    0    0    0    0    0    0    0 1669    0    0]
+ [   0    0    0    0    0    0    0    0    0    0 1697    0]
+ [   0    0    0    0    0    0    0    0    0    0    0 1691]]
+Random Forest Train Accuracy: 1.0
+
+Logistic Regression Categorization Accuracy: 1.0
+Logistic Regression Precision: 1.0
+Logistic Regression Recall: 1.0
+Logistic Regression F1 Score: 1.0
+Logistic Regression Confusion Matrix:
+[[1632    0    0    0    0    0    0    0    0    0    0    0]
+ [   0 1744    0    0    0    0    0    0    0    0    0    0]
+ [   0    0 1722    0    0    0    0    0    0    0    0    0]
+ [   0    0    0 1792    0    0    0    0    0    0    0    0]
+ [   0    0    0    0 1640    0    0    0    0    0    0    0]
+ [   0    0    0    0    0 1636    0    0    0    0    0    0]
+ [   0    0    0    0    0    0 1723    0    0    0    0    0]
+ [   0    0    0    0    0    0    0 1781    0    0    0    0]
+ [   0    0    0    0    0    0    0    0 1668    0    0    0]
+ [   0    0    0    0    0    0    0    0    0 1669    0    0]
+ [   0    0    0    0    0    0    0    0    0    0 1697    0]
+ [   0    0    0    0    0    0    0    0    0    0    0 1691]]
+Logistic Regression Train Accuracy: 1.0
+
+There seems to be soemthing wrong with the model as there is 100% accuracy. I will have to figure this out.
