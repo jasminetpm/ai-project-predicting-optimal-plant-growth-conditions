@@ -10,11 +10,11 @@ These efforts will not only enhance current operations but also provide valuable
 - [Full Name](#fullname)
 - [Overview](#overview)
 - [Installation](#installation)
-- [Description of Pipeline](#description)
-- [Overview of Key Findings from EDA](#keyfindings)
-- [Describe How Features In the Dataset Are Processed](#featuresprocessing)
-- [Explanation of Choice of Models] (#modelexplanation)
-- [Other Considerations] (#otherconsiderations)
+- [Description of Pipeline](#description-of-pipeline)
+- [Overview of Key Findings from EDA](#overview-of-key-findings-from-eda)
+- [Describe How Features In the Dataset Are Processed](#describe-how-features-in-the-dataset-are-processed)
+- [Explanation of Choice of Models](#explanation-of-choice-of-models)
+- [Other Considerations](#other-considerations)
 
 
 ## Full Name
@@ -152,7 +152,7 @@ Ensures the pipeline runs smoothly from data ingestion to model training with a 
 2. Model Training:
 - I should have used correlation insights to prioritize important features (eg Light Intensity and CO2 Levels to predict Plant Type and Stage).
 
-## Describe How Features In the Dataset Are Processed (summarised in a table)
+## Describe How Features In the Dataset Are Processed
 
 | **Feature**                     | **Type**         | **Issues Identified**                | **Processing Steps**                                                                                                                                 |
 |----------------------------------|------------------|--------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -173,7 +173,7 @@ Ensures the pipeline runs smoothly from data ingestion to model training with a 
 | **Water Level Sensor (mm)**      | Numerical        | Missing Values,              | - Impute missing values with mean. |
 
 
-## Explanation of Choice of Models for Each Machine Learning Task
+## Explanation of Choice of Models
 
 ### Task: Temperature Prediction
 
