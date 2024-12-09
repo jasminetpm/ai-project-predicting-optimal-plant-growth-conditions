@@ -16,7 +16,6 @@
     ],
     "categorical_features": [
         "System Location Code", 
-        "Previous Cycle Plant Type", 
         "Plant Type",
         "Plant Stage"
     ],

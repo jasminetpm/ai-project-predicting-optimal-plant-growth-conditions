@@ -7,45 +7,172 @@ These efforts will not only enhance current operations but also provide valuable
 
 ## Table of Contents
 
-- [Submission](#submission)
+- [Full Name](#fullname)
+- [Overview](#overview)
 - [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+- [Description of Pipeline](#description)
 
-## Submission
+
+## Full Name
+Full name (as in NRIC) and email address (stated in your application form).
+
 Full Name: Tan Ping Min, Jasmine
 Email Address: jasmine.tpm@gmail.com
 
+## Overview
+Overview of the submitted folder and the folder structure.
+
+project-folder/
+├── data/                     # Directory for storing datasets (e.g., raw and processed data).
+├── src/                      # Directory containing core Python scripts (4 files).
+│   ├── data_ingestion.py     # Script for ingesting and loading data into the pipeline.
+│   ├── preprocessing.py      # Script for cleaning and preprocessing the data.
+│   ├── model_training.py     # Script for training and evaluating models.
+│   └── config.json           # Configuration file for the project
+├── .gitignore                # Specifies files and directories to be excluded from Git tracking.
+├── eda.ipynb                 # Jupyter Notebook for Exploratory Data Analysis.
+├── README.md                 # Documentation providing an overview and instructions for the project.
+├── requirements.txt          # List of required Python packages for the project.
+├── run.sh                    # Bash script to execute the pipeline and orchestrate tasks.
+
+
 ## Installation
+Instructions for executing the pipeline and modifying any parameters.
 
-### Prerequisites
-All software, packages, and dependencies that need to be installed beforehand are listed in requirements.txt
-
-Please install them by running:
-pip install -r requirements.txt
-
-### How to Install
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/your-repo-name.git
+   git clone https://github.com/jasminetpm/aiap19-tan-ping-min-jasmine-108J.git
 
 2. Setup Environment
 Run in Console:
-
+```
 python -m venv venv
 source .venv/bin/activate
 pip install -r requirements.txt
+```
+
+All software, packages, and dependencies that need to be installed beforehand are listed in requirements.txt
 
 3. Execute the ML Pipeline
 To execute the bash script, run in Console:
-
-bash run.sh
-
+```
+**bash run.sh**
+```
 4. Check Outputs
 
-- Models saved as .pkl files (temperature_model.pkl, categorization_model.pkl).
+- Models saved as .pkl files.
 - Preprocessor saved as preprocessor.pkl.
+
+
+## Description of Pipeline
+Description of logical steps/flow of the pipeline. 
+
+1. Data Ingestion (src/data_ingestion.py)
+
+- Reads raw data from the specified path in config.json (reads data from agri.db in the data folder).
+- Validates the data for consistency, handling missing or corrupted records.
+- Saves the ingested data in a standardized format (csv file) for preprocessing.
+
+2. Exploratory Data Analysis (EDA) (eda.ipynb)
+
+- Provides insights into the data using visualizations and statistical summaries.
+- Identifies key patterns, correlations, and distributions.
+- Helps refine preprocessing or feature engineering steps (i.e. to know which parts of the data to clean and how to clean).
+
+3. Data Preprocessing (src/preprocess.py)
+
+Loads the ingested data.
+- Cleans the data (e.g., handling missing values, outliers, and converts all data to correct type). More insights into data cleaning can be found in the EDA.
+Encodes categorical variables and scales numerical features.
+We encode categorical variables because machine learning models typically operate on numerical data. Categorical variables, which contain text or labels, need to be transformed into numerical format for the model to process them.
+We scale numerical variables to ensure that all numerical features have comparable ranges, making models perform better and converge faster. For instance, models like logistic regression that I use in my pipeline are sensitive to feature scales. Large feature values can dominate smaller ones, leading to biased model performance.
+
+- Splits the data into feature matrix (X) and target variables (y).
+- Stores the processed data in pickle files (X.pkl, y_temp.pkl and y_cat.pkl).
+
+4. Model Training and Prediction (src/model_training.py)
+
+- Loads the preprocessed feature matrix (X.pkl) and target variables (y_temp.pkl and y_cat.pkl).
+- Trains predictive models (i.e., Random Forest and Gradient Boosting Regression for *Temperature Prediction*; and Random Forest Classifier and Logistic Regression for *Plant Type-Stage Prediction*- ).
+Evaluates models using metrics such as mean absolute error (MAE), accuracy, precision, recall, F1 score and confusion matrix.
+Saves trained models as serialized files (e.g., model.pkl) for later use.
+
+
+5. Configuration and Parameters (config.json)
+
+Central repository for configuration settings such as:
+- File paths for data and models.
+- Target Features
+- Numeric and Categorical Features
+
+6. Bash script that automates the sequential execution of the pipeline:
+Runs data_ingestion.py.
+Runs preprocess.py.
+Executes model_training.py.
+Ensures the pipeline runs smoothly from data ingestion to model training with a single command.
+
+7. Documentation and Requirements
+- README.md: Provides an overview of the project, setup instructions, and pipeline usage.
+- requirements.txt: Lists all Python dependencies required for the project.
+- .gitignore: Specifies files and folders to exclude from version control (e.g., intermediate files, logs, and serialized models).
+
+
+## Overview of Key Findings from EDA
+
+1. Data Quality Insights
+- Missing Data: Certain features had missing values (e.g. Humidity data had a high quanityty of missing data), indicating the need for imputation during preprocessing.
+- Outliers: Detected outliers in some numerical columns through boxplots and statistical analysis. Outlier treatment (e.g. removal) was incorporated into the ML Pipeline to avoid skewing model.performance.
+
+2. Feature Relationships
+- Correlations were observed between features, such as Nutrients N, P, K Levels, Light Intensity and CO2 Levels.
+
+3. Numerical Features
+- Numerical features had varying ranges (e.g., Light Intensity (lux) ranged from -800 to 800, while Electrical Conductivity ranged from ~ 0.0 to 3.5). Scaling was applied in the ML Pipeline to ensure all numerical features were on the same scale for optimal model performance.
+
+4. Categorical Features
+- Key categorical features, such as plant type and stage, were non-numeric. One-hot encoding was used to encode these low-cardinality variables.
+
+5. Data Distributions and Patterns
+- Clustering patterns were identified in the 3D plots and scatterplots, suggesting possible subgroups in the data, especially based on Plant Type and Stage.
+
+### Pipeline Choices Based on EDA Findings
+
+1. Preprocessing:
+- Missing value imputation.
+- Cleaning Data
+- Handling of Outliers
+- Scaling of numerical features.
+- Encoding of categorical features.
+
+2. Model Training:
+- I should have used correlation insights to prioritize important features (eg Light Intensity and CO2 Levels to predict Plant Type and Stage).
+
+## Describe how the features in the dataset are processed (summarised in a table)
+
+| **Feature**                     | **Type**         | **Issues Identified**                | **Processing Steps**                                                                                                                                 |
+|----------------------------------|------------------|--------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **System Location Code**         | Categorical      | High Cardinality                     | - Encode using target encoding to reduce dimensionality.                                                                                             |
+| **Previous Cycle Plant Type**    | Categorical      | Missing Values                       | -  One-hot encoding for categorical representation.                                                        |
+| **Plant Type**                   | Categorical      | Missing Values                       | - - Encode using one-hot encoding                                 |
+| **Plant Stage**                  | Categorical      | Low Cardinality                      | - One-hot encode to create binary features for each category.                                                                                        |
+| **Temperature Sensor (°C)**      | Numerical        | Missing Values, Outliers             | - Impute missing values with mean. <br> - Handle outliers using absolute. <br> - Scale using StandardScaler.         |
+| **Humidity Sensor (%)**          | Numerical        | Missing Values                       | - Impute missing values using mean. <br> - Scale for consistency with other numerical features.                                            |
+| **Light Intensity Sensor (lux)** | Numerical        | Outliers                             | - Handle outliers using clipping. Remove values less than zero. <br> - Scale for consistency.                                                                   |
+| **CO2 Sensor (ppm)**             | Numerical        | Outliers          | -  <br> - Scale using StandardScaler.            |
+| **EC Sensor (dS/m)**             | Numerical        | Negative Values     | - Remove negative values <br> - Use the Interquartile Range (IQR) method to identify and remove extreme outliers: Scale using StandardScaler.                        |
+| **O2 Sensor (ppm)**              | Numerical        | None                     | - Impute missing values using mean. <br> - Scale for consistency with other numerical features.                                                      |
+| **Nutrient N Sensor (ppm)**      | Numerical        | Missing Values, Outliers             | - Impute missing values with mean.                        |
+| **Nutrient P Sensor (ppm)**      | Numerical        | Missing Values, Outliers             | - Impute missing values using mean.                                        |
+| **Nutrient K Sensor (ppm)**      | Numerical        | Missing Values, Outliers             | - Impute missing values using mean.                                         |
+| **pH Sensor**                    | Numerical        | None    | - Impute missing values using mean. <br> - Standardize values to a consistent scale (e.g., 0-14).                                                    |
+| **Water Level Sensor (mm)**      | Numerical        | Missing Values,              | - Impute missing values with mean. |
+
+
+## g. Explanation of your choice of models for each machine learning task.
+## h. Evaluation of the models developed. Any metrics used in the evaluation should also be
+explained.
+## i. Other considerations for deploying the models developed.
+
 
 ## Overview of Key Findings from EDA 
 - Stripped ' ppm' and converted Nutrient N, P and K Sensor (ppm) to numeric.

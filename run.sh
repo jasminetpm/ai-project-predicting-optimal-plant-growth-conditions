@@ -5,15 +5,12 @@ cd "$(dirname "$0")/src"
 
 echo "Running pipeline..."
 
-# Add commands to run your Python scripts, training models, etc.
-
 # Step 1: Data Ingestion
 python data_ingestion.py
 
 # Step 2: Data Preprocessing
-# Run both predictions (temperature and plant_stage) in one go
-python preprocessing.py
+# Run the script to preprocess the data
+python preprocessing.py 
 
-
-# Step 3: Model Training
+# Step 3: Model Training and Prediction
 python model_training.py
