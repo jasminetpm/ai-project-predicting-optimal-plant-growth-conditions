@@ -1,4 +1,4 @@
-# AIAP
+# Predicting Optimal Plant Growth Conditions
 `# AIAP Batch 19 Technical Assessment`
 
 Create Machine Learning models to predict the temperature conditions within the farm's closed environment, ensuring optimal plant growth. 
@@ -17,12 +17,6 @@ These efforts will not only enhance current operations but also provide valuable
 - [Explanation of Choice of Models](#explanation-of-choice-of-models)
 - [Other Considerations](#other-considerations)
 
-
-## Full Name
-Full name (as in NRIC) and email address (stated in your application form).
-
-Full Name: Tan Ping Min, Jasmine
-Email Address: jasmine.tpm@gmail.com
 
 ## Overview
 Overview of the submitted folder and the folder structure.
