@@ -18,7 +18,7 @@ These efforts will not only enhance current operations but also provide valuable
 
 
 ## Overview
-Overview of the submitted folder and the folder structure.
+Overview of the folder and the folder structure.
 
 ```
 project-folder/
